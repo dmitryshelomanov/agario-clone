@@ -18,6 +18,4 @@ let circle = (~point, ~r, ~color="black", ctx) => {
   fill(ctx);
 };
 
-let clear = (~x=0.0, ~y=0.0, ~w, ~h, ctx) => {
-  clearRect(~x, ~y, ~w, ~h, ctx);
-};
+let clear = (~x=0.0, ~y=0.0, ~w, ~h, ctx) => clearRect(~x, ~y, ~w, ~h, ctx);

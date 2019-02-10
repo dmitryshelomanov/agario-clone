@@ -12,18 +12,10 @@ let distance = (p, p1) => {
   Js.Math.sqrt(dirX *. dirX +. dirY *. dirY);
 };
 
-let add = (p, p1) => {
-  vector2(p1.x +. p.x, p1.y +. p.y)
-};
+let add = (p, p1) => vector2(p1.x +. p.x, p1.y +. p.y);
 
-let subtract = (p, p1) => {
-  vector2(p1.x -. p.x, p1.y -. p.y)
-};
+let subtract = (p, p1) => vector2(p1.x -. p.x, p1.y -. p.y);
 
-let multiplication = (p, n) => {
-  vector2(p.x *. n, p.y *. n)
-};
+let multiplication = (p, n) => vector2(p.x *. n, p.y *. n);
 
-let divided = (p, n) => {
-  vector2(p.x /. n, p.y /. n)
-};
+let divided = (p, n) => vector2(p.x /. n, p.y /. n);
