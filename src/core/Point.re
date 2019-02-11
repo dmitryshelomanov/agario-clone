@@ -7,15 +7,15 @@ let vector2 = (x, y) => {x, y};
 
 let magnitude = ({x, y}) => Js.Math.sqrt(x *. x +. y *. y);
 
-let distance = (p, p1) => vector2(p1.x -. p.x, p1.y -. p.y) |> magnitude;
-
 let add = (p, p1) => vector2(p1.x +. p.x, p1.y +. p.y);
-
-let subtract = (p, p1) => vector2(p1.x -. p.x, p1.y -. p.y);
 
 let multiplication = ({x, y}, n) => vector2(x *. n, y *. n);
 
 let divided = ({x, y}, n) => vector2(x /. n, y /. n);
+
+let subtract = (p, p1) => vector2(p1.x -. p.x, p1.y -. p.y);
+
+let distance = (p, p1) => subtract(p, p1) |> magnitude;
 
 let normalize = p =>
   switch (p |> magnitude) {
