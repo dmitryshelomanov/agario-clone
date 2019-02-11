@@ -1,7 +1,5 @@
 open Webapi.Dom;
 open Webapi.Canvas.CanvasElement;
-open Point;
-open Draw;
 open Utils;
 
 
@@ -11,15 +9,14 @@ let main = () => {
     |> Document.getElementById("app")
     |> unwrap;
   let ctx = getContext2d(canvas);
-  let p1 = ref(vector2(0.1, 0.1));
-
-  distance(vector2(0.0, 0.0), vector2(10.0, 10.0)) |> Js.log;
+  let renderer = Draw.make(ctx);
+  let p1 = ref(Point.vector2(0.1, 0.1));
 
   let rec loop = _e => {
-    p1 := add(p1^, vector2(0.1, 0.1));
+    p1 := Point.add(p1^, Point.vector2(0.1, 0.1));
 
-    clear(~h=400.0, ~w=400.0, ctx);
-    circle(~point=p1^, ~r=10.0, ctx);
+    renderer.clear(~h=400.0, ~w=400.0, ());
+    renderer.circle(~point=p1^, ~r=10.0, ());
     Webapi.requestAnimationFrame(loop);
   };
 

@@ -1,4 +1,4 @@
-type point = {
+type t = {
   x: float,
   y: float,
 };
