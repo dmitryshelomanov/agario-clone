@@ -1,18 +1,9 @@
-# Basic Reason Template
+## Build webpack
+> npm run webpack:build
 
-Hello! This project allows you to quickly get started with Reason and BuckleScript. If you wanted a more sophisticated version, try the `react` template (`bsb -theme react -init .`).
+## Build reason
+> npm run build:bsb
 
-# Build
-```
-npm run build
-```
-
-# Build + Watch
-
-```
-npm run start
-```
-
-
-# Editor
-If you use `vscode`, Press `Windows + Shift + B` it will build automatically
+## Dev
+* `npm run start:bsb`
+* `npm run dev:server`
