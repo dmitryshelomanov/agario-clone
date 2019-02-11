@@ -7,7 +7,7 @@ const { NODE_ENV = 'development' } = process.env
 module.exports = {
   mode: NODE_ENV,
   devtool: 'inline-source-map',
-  entry: './src/index.bs.js',
+  entry: './lib/js/src/index.bs.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
