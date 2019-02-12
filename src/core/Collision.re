@@ -2,8 +2,8 @@ type sideOfBoundaries =
   | Left(float)
   | Right(float);
 
-let outOfBoundaries = (side, p) =>
+let outOfBoundaries = (side, boundaryValue) =>
   switch (side) {
-  | Left(p1) => p < p1
-  | Right(p1) => p > p1
+  | Left(poitValue) => boundaryValue > poitValue
+  | Right(poitValue) => boundaryValue < poitValue
   };
