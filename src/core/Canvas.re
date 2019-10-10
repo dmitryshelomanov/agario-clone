@@ -1,6 +1,16 @@
 open Webapi.Canvas;
 open Point;
 
+external context2dToJsObj: Canvas2d.t => Js.t({..}) = "%identity";
+
+[@bs.set] external setWidth: (Dom.element, int) => unit = "width";
+[@bs.set] external setHeight: (Dom.element, int) => unit = "height";
+
+let setSize = (~w: int, ~h: int, canvas) => {
+  setHeight(canvas, h);
+  setWidth(canvas, w);
+};
+
 let baseMove = (matrix: (Point.t, Point.t), ctx) => {
   let (i, j) = matrix;
 
