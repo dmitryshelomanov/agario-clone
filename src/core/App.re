@@ -1,35 +1,14 @@
 open Webapi.Canvas;
 
-
-type boundaries = {
-  width: float,
-  height: float,
-};
-
-type t = {
-  boundaries,
-  mutable origin: Point.t,
-  ctx: Canvas2d.t,
-};
-
-let create =
-    (~boundaries, ~origin=Point.vector2(0.0, 0.0), ctx) => {
-  boundaries,
-  origin,
-  ctx,
-};
-
-let viewBoundaryWidth = world => world.boundaries.width;
-
-let render = (world: t, callback: t => unit) => {
+let looper = (callback: unit => unit, ctx: Canvas2d.t) => {
   let rec loop = _t => {
     Canvas.clear(
-      ~w=world.boundaries.width,
-      ~h=world.boundaries.height,
-      world.ctx,
+      ~w=Canvas.context2dToJsObj(ctx)##canvas##width,
+      ~h=Canvas.context2dToJsObj(ctx)##canvas##height,
+      ctx,
     );
 
-    callback(world);
+    callback();
     Webapi.requestAnimationFrame(loop);
   };
 
