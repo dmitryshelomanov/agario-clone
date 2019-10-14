@@ -1,40 +1,41 @@
-open Webapi.Canvas;
-open Point;
-
 type t = {
   mutable position: Point.t,
   mutable offset: Point.t,
-  width: float,
-  height: float,
-  screen: Canvas2d.t,
+  size: Size.t,
 };
 
-type coordinates =
-  | GLOBAL_COORD
-  | LOCAL_COORD;
-
-let createCamera =
+let make =
     (
       ~position=Point.vector2(0.0, 0.0),
       ~offset=Point.vector2(0.0, 0.0),
-      ctx: Canvas2d.t,
+      ~size,
+      (),
     ) => {
-  {
-    position,
-    offset,
-    width: Canvas.context2dToJsObj(ctx)##canvas##width,
-    height: Canvas.context2dToJsObj(ctx)##canvas##height,
-    screen: ctx,
-  };
+  {position, offset, size};
 };
 
-let move = (~point, camera) => {
-  camera.position = plus(camera.position, point);
+let move = (~velocity: Point.t, camera) => {
+  camera.position = Point.(camera.position + velocity);
 };
 
-let computedNextPositionByCamera = (~point, ~coord: coordinates, camera) => {
-  switch (coord) {
-  | GLOBAL_COORD => plus(minus(point, camera.position), camera.offset)
-  | LOCAL_COORD => plus(point, camera.offset)
-  };
+let followTo = (~target: Point.t, ~time: float, camera) => {
+  let {position} = camera;
+
+  camera.position = time |> Point.moveTo(~point=position, ~target);
+};
+
+let screenToWorldPoint = (camera, point) =>
+  Point.(point + camera.position - camera.offset);
+
+let worldToScreenPoint = (camera, point) =>
+  Point.(point - camera.position + camera.offset);
+
+let inViewport = (~point: Point.t, camera) => {
+  let {position, size} = camera;
+  let (width, height) = size;
+
+  let inX = point.x > position.x && point.x < width +. position.x;
+  let inY = point.y > position.y && point.y < height +. position.y;
+
+  inX && inY;
 };

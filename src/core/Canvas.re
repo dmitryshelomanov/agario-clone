@@ -3,10 +3,10 @@ open Point;
 
 external context2dToJsObj: Canvas2d.t => Js.t({..}) = "%identity";
 
-[@bs.set] external setWidth: (Dom.element, int) => unit = "width";
-[@bs.set] external setHeight: (Dom.element, int) => unit = "height";
+[@bs.set] external setWidth: (Dom.element, float) => unit = "width";
+[@bs.set] external setHeight: (Dom.element, float) => unit = "height";
 
-let setSize = (~w: int, ~h: int, canvas) => {
+let setSize = (~w: float, ~h: float, canvas) => {
   setHeight(canvas, h);
   setWidth(canvas, w);
 };

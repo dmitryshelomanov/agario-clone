@@ -1,0 +1,1 @@
+let intToString = num => string_of_int(num);
