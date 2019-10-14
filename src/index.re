@@ -1,42 +1,56 @@
-open Webapi.Dom;
-open Webapi.Canvas.CanvasElement;
+type player = {
+  mutable shape: Shapes.t,
+  mutable speed: float,
+};
 
 let main = () => {
-  let canvas =
-    Belt.Option.(document |> Document.getElementById("app") |> getExn);
+  open Inputs;
 
-  Canvas.setSize(~w=600, ~h=300, canvas);
+  let worldWidth = 700.0;
+  let worldHeight = 500.0;
+  let cameraOffset = Point.vector2(worldWidth /. 2.0, worldHeight /. 2.0);
+  let game =
+    Core.makeEngine(
+      ~boundaries=(worldWidth, worldHeight),
+      ~screenSizes=(worldWidth, worldHeight),
+      ~offset=cameraOffset,
+      (),
+    );
 
-  let vertexes = [|Point.vector2(50.0, 50.0), Point.vector2(100.0, 100.0)|];
-  let ctx = getContext2d(canvas);
-  let camera = Camera.createCamera(ctx);
-  let mouse = Mouse.createMouseControll(canvas);
+  let worldToScreen = point =>
+    point |> Camera.worldToScreenPoint(game.camera);
 
-  ctx
-  |> App.looper(() => {
-       let mousePos = Mouse.getPosition(mouse);
-       vertexes
-       |> Js_array.forEach(point =>
-            Draw.circle(
-              ~point=
-                Camera.computedNextPositionByCamera(
-                  ~point,
-                  ~coord=Camera.GLOBAL_COORD,
-                  camera,
-                ),
-              ~r=25.0,
-              ctx,
-            )
-          );
+  let pl = {
+    shape:
+      Shapes.makeRect(
+        ~position=Point.vector2(0.0, 0.0),
+        ~size=(50.0, 50.0),
+        ~color="red",
+        (),
+      ),
+    speed: 6.0,
+  };
 
-       if (mousePos.x > camera.width -. 50.0) {
-         Camera.move(~point=Point.vector2(2.0, 0.0), camera);
-       };
+  let plMove = () => {
+    Shapes.(
+      if (game.inputs.keyboard |> Keyboard.isDown(Keyboard.KeyS)) {
+        Point.(position(pl.shape) + vector2(0.0, pl.speed))
+        |> setPosition(pl.shape);
+      }
+    );
+  };
 
-       if (mousePos.x < 50.0) {
-         Camera.move(~point=Point.vector2(-2.0, 0.0), camera);
-       };
-     });
+  Core.looper(
+    ~game,
+    _ => {
+      plMove();
+
+      (game.context, pl.shape)
+      |> Shapes.render(~pointTransformer=worldToScreen);
+
+      game.context |> Debug.cameraInfo(~camera=game.camera);
+    },
+  );
 };
 
 main();
